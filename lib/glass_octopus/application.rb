@@ -12,7 +12,7 @@ module GlassOctopus
       @running   = false
       @done      = false
 
-      yield @config if block_given?
+      yield @config
     end
 
     def run
