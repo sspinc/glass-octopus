@@ -25,7 +25,7 @@ module GlassOctopus
   #     }
   #   end.to_app
   #
-  #   GlassOctopus::Application.run(app) do |config|
+  #   GlassOctopus.run(app) do |config|
   #     # set config here
   #   end
   #
@@ -43,7 +43,7 @@ module GlassOctopus
   #     }
   #   end.to_app
   #
-  #   GlassOctopus::Application.run(app) do |config|
+  #   GlassOctopus.run(app) do |config|
   #     # set config here
   #   end
   #
