@@ -4,9 +4,9 @@ module GlassOctopus
   # A very simple runner that takes an app and handles graceful shutdown for
   # SIGINT and SIGTERM.
   #
-  # The {#run} method alters the processes state globally and irreversibly by
-  # registering signal handlers. The Runner class is a singleton and can only be
-  # started once.
+  # The {#run} method alters the state of the process globally and irreversibly
+  # by registering signal handlers. The Runner class is a singleton and can only
+  # be started once.
   #
   # Runner runs the application in the main thread. When a signal hits the
   # process the control is transferred to the signal handler which will raise an

@@ -5,12 +5,13 @@ module GlassOctopus
   # very similar to Rack::Builder.
   #
   # Middleware can be a class with a similar signature to Rack middleware. The
-  # consturctor needs to take an +app+ object which is basically the next
+  # constructor needs to take an +app+ object which is basically the next
   # middleware in the stack and the instance of the class has to respond to
   # +#call(ctx)+.
   #
-  # Lambdas/procs can also be used as middleware. In this case the middleware does not have control over the
-  # execution of the next middleware: the next one is *always* called.
+  # Lambdas/procs can also be used as middleware. In this case the middleware
+  # does not have control over the execution of the next middleware: the next
+  # one is *always* called.
   #
   # @example
   #   require "glass_octopus"
@@ -68,7 +69,7 @@ module GlassOctopus
     # Sets the final step in the middleware pipeline, essentially the
     # application itself. Takes a parameter that responds to +#call(ctx)+.
     #
-    # @param app [#call] the application to process the message
+    # @param app [#call] the application to process the messages
     # @return [Builder] returns self so calls are chainable
     def run(app)
       @app = app
