@@ -1,16 +1,9 @@
 require "glass_octopus/consumer"
 require "glass_octopus/configuration"
-require "glass_octopus/runner"
 
 module GlassOctopus
   class Application
     attr_reader :config
-
-    def self.run(processor, &block)
-      raise ArgumentError, "A block must be given to set up the application." unless block_given?
-      app = new(processor, &block)
-      Runner.run(app)
-    end
 
     def initialize(processor)
       @processor = processor

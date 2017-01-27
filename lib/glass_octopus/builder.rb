@@ -69,7 +69,7 @@ module GlassOctopus
     # Sets the final step in the middleware pipeline, essentially the
     # application itself. Takes a parameter that responds to +#call(ctx)+.
     #
-    # @param app [#call] the application to process the messages
+    # @param app [#call] the application to process messages
     # @return [Builder] returns self so calls are chainable
     def run(app)
       @app = app

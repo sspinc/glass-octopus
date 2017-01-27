@@ -9,7 +9,7 @@ app = GlassOctopus::Builder.new do
   }
 end.to_app
 
-GlassOctopus::Application.run(app) do |config|
+GlassOctopus.run(app) do |config|
   config.consumer.broker_list = %w[localhost:9092]
   config.consumer.zookeeper_list = %w[localhost:2181]
   config.consumer.topic = "mytopic"
