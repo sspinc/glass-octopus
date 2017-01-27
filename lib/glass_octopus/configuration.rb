@@ -41,7 +41,7 @@ module GlassOctopus
 
       def default_executor
         threads = ENV.integer("CONCURRENCY", default: 25)
-        BoundedExecutor.new(Concurrent::FixedThreadPool.new(threads), threads)
+        BoundedExecutor.new(Concurrent::FixedThreadPool.new(threads), limit: threads)
       end
 
       def default_consumer_options

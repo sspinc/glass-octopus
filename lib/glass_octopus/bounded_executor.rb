@@ -21,7 +21,7 @@ module GlassOctopus
   class BoundedExecutor < SimpleDelegator
     # @param executor the executor implementation to wrap
     # @param limit [Integer] maximum number of jobs that can be submitted
-    def initialize(executor, limit)
+    def initialize(executor, limit:)
       super(executor)
       @semaphore = Concurrent::Semaphore.new(limit)
     end
