@@ -27,8 +27,8 @@ module GlassOctopus
     end
 
     # Submit a task to the executor for asynchronous processing. If the
-    # submission limit is reach {#post} will block until there is a free worker
-    # to accept the new task.
+    # submission limit is reached {#post} will block until there is a free
+    # worker to accept the new task.
     #
     # @param args [Array] arguments to pass to the task
     # @return [Boolean] +true+ if the task was accepted, false otherwise
