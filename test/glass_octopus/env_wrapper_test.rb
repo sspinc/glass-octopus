@@ -45,7 +45,7 @@ class GlassOctopus::EnvWrapperTest < Minitest::Test
   end
 
   def test_boolean_default
-    assert_equal nil, @env.boolean("BOOL")
+    assert_nil @env.boolean("BOOL")
     assert_equal true, @env.boolean("BOOL", default: true)
   end
 
