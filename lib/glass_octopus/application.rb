@@ -2,6 +2,7 @@ require "glass_octopus/consumer"
 require "glass_octopus/configuration"
 
 module GlassOctopus
+  # @api private
   class Application
     attr_reader :config
 
@@ -46,8 +47,6 @@ module GlassOctopus
     def done?
       @done
     end
-
-    private
 
     def connection
       config.connection_adapter.connect
