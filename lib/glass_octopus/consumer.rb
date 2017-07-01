@@ -1,4 +1,4 @@
-require "glass_octopus/worker"
+require "glass_octopus/unit_of_work"
 
 module GlassOctopus
   class Consumer
@@ -13,8 +13,8 @@ module GlassOctopus
 
     def run
       connection.fetch_message do |message|
-        worker = Worker.new(message, processor, app)
-        submit(worker)
+        work = UnitOfWork.new(message, processor, app)
+        submit(work)
       end
     end
 
@@ -27,8 +27,8 @@ module GlassOctopus
 
     private
 
-    def submit(worker)
-      if executor.post(worker) { |worker| worker.call }
+    def submit(work)
+      if executor.post(work) { |work| work.perform }
         logger.debug { "Accepted message: #{worker.message.to_h}" }
       else
         logger.warn { "Rejected message: #{worker.message.to_h}" }

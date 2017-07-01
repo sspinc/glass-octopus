@@ -1,16 +1,16 @@
 require "stringio"
 require "logger"
 require "test_helper"
-require "glass_octopus/worker"
+require "glass_octopus/unit_of_work"
 
-class GlassOctopus::WorkerTest < Minitest::Test
+class GlassOctopus::UnitOfWorkTest < Minitest::Test
   def test_processor_called_with_context
     processor = Minitest::Mock.new
     message = Object.new
     app = Object.new
 
     processor.expect(:call, nil, [GlassOctopus::Context])
-    GlassOctopus::Worker.new(message, processor, app).call
+    GlassOctopus::UnitOfWork.new(message, processor, app).perform
 
     assert processor.verify
   end
@@ -19,9 +19,9 @@ class GlassOctopus::WorkerTest < Minitest::Test
     processor = ->(ctx) { raise StandardError, "an error..." }
     app, io = new_app
     message = Object.new
-    worker = GlassOctopus::Worker.new(message, processor, app)
+    worker = GlassOctopus::UnitOfWork.new(message, processor, app)
 
-    worker.call
+    worker.perform
     assert_match /StandardError - an error.../, io.string
   end
 

@@ -5,7 +5,7 @@ module GlassOctopus
   # middleware stack. It catches and logs all application level exceptions.
   #
   # @api private
-  class Worker
+  class UnitOfWork
     attr_reader :message, :processor, :app
 
     def initialize(message, processor, app)
@@ -14,14 +14,12 @@ module GlassOctopus
       @app       = app
     end
 
-    def call
+    def perform
       processor.call(build_context)
     rescue => ex
       app.logger.error("#{ex.class} - #{ex.message}:")
       app.logger.error(ex.backtrace.join("\n")) if ex.backtrace
     end
-
-    private
 
     def build_context
       Context.new(message, app)
