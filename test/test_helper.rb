@@ -1,4 +1,5 @@
 require "minitest/autorun"
+require "minitest/color"
 require "minitest/guard_minitest_plugin"
 
 lib_path = File.expand_path("../../lib", __FILE__)
