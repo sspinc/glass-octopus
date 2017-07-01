@@ -15,8 +15,6 @@ module GlassOctopus
   #
   # Runner does not provide any meaningful error handling. Errors are logged and
   # then the process exits with status code 1.
-  #
-  # @api private
   class Runner
     include Singleton
 
@@ -58,8 +56,6 @@ module GlassOctopus
     end
 
     private
-
-    attr_reader :logger
 
     def running!
       @running = true
