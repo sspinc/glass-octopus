@@ -50,7 +50,7 @@ module GlassOctopus
     private
 
     def connection
-      config.connection_adapter.new(config.consumer_options)
+      config.connection_adapter.connect
     end
   end
 end

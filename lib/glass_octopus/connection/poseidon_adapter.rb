@@ -1,17 +1,26 @@
+require "ostruct"
 require "poseidon_cluster"
 require "glass_octopus/message"
 
 module GlassOctopus
   class PoseidonAdapter
-    def initialize(options={})
-      @options = options
+    def initialize
       @poseidon_consumer = nil
       @closed = false
+
+      config = OpenStruct.new
+      yield config
+
+      @options = config.to_h
       validate_options!
     end
 
-    def fetch_message
+    def connect
       @poseidon_consumer = create_consumer_group
+      self
+    end
+
+    def fetch_message
       @poseidon_consumer.fetch_loop do |partition, messages|
         break if closed?
 
@@ -32,8 +41,6 @@ module GlassOctopus
     def closed?
       @closed
     end
-
-    private
 
     def create_consumer_group
       options = @options.dup

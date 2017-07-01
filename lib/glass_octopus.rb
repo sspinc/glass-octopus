@@ -5,7 +5,6 @@ require "glass_octopus/application"
 require "glass_octopus/builder"
 
 module GlassOctopus
-
   # Run an application. The application can be anything that responds to
   # +#call+. It is invoked with with a context that has the message and other
   # goodies.
@@ -49,4 +48,6 @@ module GlassOctopus
   def self.build(&block)
     Builder.new(&block).to_app
   end
+
+  autoload :PoseidonAdapter, "glass_octopus/connection/poseidon_adapter.rb"
 end
