@@ -6,6 +6,7 @@ module GlassOctopus
   # @!attribute [rw] logger
   #   A logger object. Defaults to the application logger.
   # @!attribute [r] message
+  #   A message read from Kafka.
   #   @return [Message]
   class Context
     extend Forwardable
