@@ -10,26 +10,16 @@ module GlassOctopus
       @processor = processor
       @config    = Configuration.new
       @consumer  = nil
-      @running   = false
-      @done      = false
 
       yield @config
     end
 
     def run
-      return if running?
-
-      @running = true
-      @config.freeze
-
       @consumer = Consumer.new(connection, processor, config.executor, logger)
       @consumer.run
     end
 
     def shutdown(timeout=nil)
-      return if done? || !running?
-
-      @done = true
       timeout ||= config.shutdown_timeout
       @consumer.shutdown(timeout) if @consumer
 
@@ -38,14 +28,6 @@ module GlassOctopus
 
     def logger
       config.logger
-    end
-
-    def running?
-      @running
-    end
-
-    def done?
-      @done
     end
 
     def connection
