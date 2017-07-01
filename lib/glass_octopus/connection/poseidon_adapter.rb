@@ -7,11 +7,12 @@ module GlassOctopus
   # gem} to talk to Kafka 0.8.x. Tested with Kafka 0.8.2.
   class PoseidonAdapter
     # @yield configure poseidon in the yielded block
-    #   The following configuration is mandatory:
-    #   * broker_list: list of Kafka broker addresses
-    #   * zookeeper_list: list of Zookeeper addresses
-    #   * topic: name of the topic to subscribe to
-    #   * group: name of the consumer group
+    #   The following configuration values are required:
+    #
+    #   * +broker_list+: list of Kafka broker addresses
+    #   * +zookeeper_list+: list of Zookeeper addresses
+    #   * +topic+: name of the topic to subscribe to
+    #   * +group+: name of the consumer group
     #
     #   Any other configuration value is passed to
     #   {http://www.rubydoc.info/github/bsm/poseidon_cluster/Poseidon/ConsumerGroup Poseidon::ConsumerGroup}.
@@ -27,7 +28,7 @@ module GlassOctopus
     end
 
     # Connect to Kafka and Zookeeper, register the consumer group.
-    # This also initates a rebalance in the consumer group.
+    # This also initiates a rebalance in the consumer group.
     def connect
       @poseidon_consumer = create_consumer_group
       self
