@@ -1,5 +1,3 @@
-ENV["GUARD_MINITEST"] = "1"
-
 notification :terminal_notifier
 
 guard :minitest, all_on_start: false do
