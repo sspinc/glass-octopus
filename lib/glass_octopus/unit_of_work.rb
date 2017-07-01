@@ -2,27 +2,23 @@ require "glass_octopus/context"
 
 module GlassOctopus
   # Unit of work. Builds a context for a message and runs it through the
-  # middleware stack. It catches and logs all application level exceptions.
+  # middleware stack. It catches and logs all loggerlication level exceptions.
   #
   # @api private
   class UnitOfWork
-    attr_reader :message, :processor, :app
+    attr_reader :message, :processor, :logger
 
-    def initialize(message, processor, app)
+    def initialize(message, processor, logger)
       @message   = message
       @processor = processor
-      @app       = app
+      @logger    = logger
     end
 
     def perform
-      processor.call(build_context)
+      processor.call(Context.new(message, logger))
     rescue => ex
-      app.logger.error("#{ex.class} - #{ex.message}:")
-      app.logger.error(ex.backtrace.join("\n")) if ex.backtrace
-    end
-
-    def build_context
-      Context.new(message, app)
+      logger.logger.error("#{ex.class} - #{ex.message}:")
+      logger.logger.error(ex.backtrace.join("\n")) if ex.backtrace
     end
   end
 end

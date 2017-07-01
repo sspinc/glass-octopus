@@ -3,16 +3,14 @@ require "forwardable"
 module GlassOctopus
   # Message context. Wraps a Kafka message and adds some convenience methods.
   #
-  # @!attribute [r] application
-  #   @return [Application] the application object.
   # @!attribute [rw] logger
   #   A logger object. Defaults to the application logger.
   # @!attribute [r] message
   #   @return [Message]
   class Context
     extend Forwardable
-    attr_reader :message, :application
-    attr_writer :logger
+    attr_reader :message
+    attr_accessor :logger
 
     # @!method [](key)
     #   Retrieves the +value+ object corresponding to the +key+ object.
@@ -22,14 +20,10 @@ module GlassOctopus
     def_delegators :@data, :[], :[]=
 
     # @api private
-    def initialize(message, app)
-      @data        = {}
-      @message     = message
-      @application = app
-    end
-
-    def logger
-      @logger || application.logger
+    def initialize(message, logger)
+      @data    = {}
+      @message = message
+      @logger  = logger
     end
   end
 end

@@ -1,6 +1,7 @@
 require "glass_octopus/unit_of_work"
 
 module GlassOctopus
+  # @api private
   class Consumer
     attr_reader :connection, :processor, :app, :executor
 
@@ -13,7 +14,7 @@ module GlassOctopus
 
     def run
       connection.fetch_message do |message|
-        work = UnitOfWork.new(message, processor, app)
+        work = UnitOfWork.new(message, processor, logger)
         submit(work)
       end
     end
@@ -21,11 +22,9 @@ module GlassOctopus
     def shutdown(timeout=10)
       connection.close
       executor.shutdown
-      app.logger.info("Waiting for workers to terminate...")
+      logger.info("Waiting for workers to terminate...")
       executor.wait_for_termination(timeout)
     end
-
-    private
 
     def submit(work)
       if executor.post(work) { |work| work.perform }
