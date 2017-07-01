@@ -18,7 +18,7 @@ GlassOctopus.run(app) do |config|
   config.connection_adapter = GlassOctopus::PoseidonAdapter.new do |config|
     config.broker_list    = array_from_env("KAFKA_BROKER_LIST", default: %w[localhost:9092])
     config.zookeeper_list = array_from_env("ZOOKEEPER_LIST", default: %w[localhost:2181])
-    config.topic          = "mytopic"
-    config.group          = "mygroup"
+    config.topic          = ENV.fetch("KAFKA_TOPIC", "mytopic")
+    config.group          = ENV.fetch("KAFKA_GROUP", "mygroup")
   end
 end

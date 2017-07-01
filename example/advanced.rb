@@ -15,14 +15,15 @@ def array_from_env(key, default:)
 end
 
 GlassOctopus.run(app) do |config|
-  config.connection_adapter = GlassOctopus::PoseidonAdapter.new do |config|
-    config.broker_list    = array_from_env("KAFKA_BROKER_LIST", default: %w[localhost:9092])
-    config.zookeeper_list = array_from_env("ZOOKEEPER_LIST", default: %w[localhost:2181])
-    config.topic          = "mytopic"
-    config.group          = "mygroup"
-  end
+  config.logger = Logger.new("glass_octopus.log")
 
-  config.logger = config.consumer.logger = Logger.new("glass_octopus.log")
+  config.connection_adapter = GlassOctopus::PoseidonAdapter.new do |kafka_config|
+    kafka_config.broker_list    = array_from_env("KAFKA_BROKER_LIST", default: %w[localhost:9092])
+    kafka_config.zookeeper_list = array_from_env("ZOOKEEPER_LIST", default: %w[localhost:2181])
+    kafka_config.topic          = ENV.fetch("KAFKA_TOPIC", "mytopic")
+    kafka_config.group          = ENV.fetch("KAFKA_GROUP", "mygroup")
+    kafka_config.logger         = config.logger
+  end
 
   config.executor = Concurrent::ThreadPoolExecutor.new(
     max_threads: 25,
