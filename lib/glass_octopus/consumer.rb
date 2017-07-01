@@ -3,13 +3,13 @@ require "glass_octopus/unit_of_work"
 module GlassOctopus
   # @api private
   class Consumer
-    attr_reader :connection, :processor, :app, :executor
+    attr_reader :connection, :processor, :executor, :logger
 
-    def initialize(connection, processor, app, executor)
+    def initialize(connection, processor, executor, logger)
       @connection = connection
       @processor  = processor
-      @app        = app
       @executor   = executor
+      @logger     = logger
     end
 
     def run
@@ -34,10 +34,6 @@ module GlassOctopus
       end
     rescue Concurrent::RejectedExecutionError => ex
       logger.warn { "Rejected message: #{worker.message.to_h}" }
-    end
-
-    def logger
-      app.logger
     end
   end
 end

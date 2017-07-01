@@ -41,11 +41,9 @@ class GlassOctopus::ConsumerTest < Minitest::Test
 
   def new_consumer(connection, processor=nil)
     processor ||= Proc.new {}
-    app = App.new(NullLogger.new)
+    logger = NullLogger.new
     executor = Concurrent::ImmediateExecutor.new
 
-    GlassOctopus::Consumer.new(connection, processor, app, executor)
+    GlassOctopus::Consumer.new(connection, processor, executor, logger)
   end
-
-  App = Struct.new(:logger)
 end

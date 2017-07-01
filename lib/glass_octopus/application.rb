@@ -4,7 +4,7 @@ require "glass_octopus/configuration"
 module GlassOctopus
   # @api private
   class Application
-    attr_reader :config
+    attr_reader :config, :processor
 
     def initialize(processor)
       @processor = processor
@@ -22,7 +22,7 @@ module GlassOctopus
       @running = true
       @config.freeze
 
-      @consumer = Consumer.new(connection, @processor, self, config.executor)
+      @consumer = Consumer.new(connection, processor, config.executor, logger)
       @consumer.run
     end
 
