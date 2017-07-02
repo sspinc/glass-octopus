@@ -34,7 +34,7 @@ module GlassOctopus
     #
     #   Optional configuration:
     #
-    #   * +kafka+: a hash passed on to Kafka.new
+    #   * +client+: a hash passed on to Kafka.new
     #   * +consumer+: a hash passed on to kafka.consumer
     #   * +subscription+: a hash passed on to consumer.subscribe
     #
@@ -91,7 +91,7 @@ module GlassOctopus
     def connect_to_kafka
       Kafka.new(
         seed_brokers: options.fetch(:broker_list),
-        **options.fetch(:kafka, {})
+        **options.fetch(:client, {})
       )
     end
 

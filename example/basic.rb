@@ -15,10 +15,10 @@ def array_from_env(key, default:)
 end
 
 GlassOctopus.run(app) do |config|
-  config.connection_adapter = GlassOctopus::PoseidonAdapter.new do |config|
-    config.broker_list    = array_from_env("KAFKA_BROKER_LIST", default: %w[localhost:9092])
-    config.zookeeper_list = array_from_env("ZOOKEEPER_LIST", default: %w[localhost:2181])
-    config.topic          = ENV.fetch("KAFKA_TOPIC", "mytopic")
-    config.group          = ENV.fetch("KAFKA_GROUP", "mygroup")
+  config.adapter :poseidon do |kafka_config|
+    kafka_config.broker_list    = array_from_env("KAFKA_BROKER_LIST", default: %w[localhost:9092])
+    kafka_config.zookeeper_list = array_from_env("ZOOKEEPER_LIST", default: %w[localhost:2181])
+    kafka_config.topic          = ENV.fetch("KAFKA_TOPIC", "mytopic")
+    kafka_config.group          = ENV.fetch("KAFKA_GROUP", "mygroup")
   end
 end

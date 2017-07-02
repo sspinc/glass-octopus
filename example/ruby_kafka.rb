@@ -15,10 +15,10 @@ def array_from_env(key, default:)
 end
 
 GlassOctopus.run(app) do |config|
-  config.connection_adapter = GlassOctopus::RubyKafkaAdapter.new do |kafka_config|
-    kafka_config.broker_list = array_from_env("KAFKA_BROKER_LIST", default: %w[localhost:9092])
-    kafka_config.topic       = ENV.fetch("KAFKA_TOPIC", "mytopic")
-    kafka_config.group       = ENV.fetch("KAFKA_GROUP", "mygroup")
-    kafka_config.kafka       = { logger: config.logger }
+  config.adapter :ruby_kafka do |kafka|
+    kafka.broker_list = array_from_env("KAFKA_BROKER_LIST", default: %w[localhost:9092])
+    kafka.topic       = ENV.fetch("KAFKA_TOPIC", "mytopic")
+    kafka.group       = ENV.fetch("KAFKA_GROUP", "mygroup")
+    kafka.client      = { logger: config.logger }
   end
 end

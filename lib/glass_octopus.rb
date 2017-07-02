@@ -47,7 +47,4 @@ module GlassOctopus
   def self.build(&block)
     Builder.new(&block).to_app
   end
-
-  autoload :PoseidonAdapter, "glass_octopus/connection/poseidon_adapter.rb"
-  autoload :RubyKafkaAdapter, "glass_octopus/connection/ruby_kafka_adapter.rb"
 end
