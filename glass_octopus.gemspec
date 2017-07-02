@@ -25,7 +25,7 @@ EOF
 
   spec.add_runtime_dependency "concurrent-ruby", "~> 1.0", ">= 1.0.1"
 
-  spec.add_development_dependency "rake", "~> 10.0"
+  spec.add_development_dependency "rake", "~> 12.0"
   spec.add_development_dependency "minitest", "~> 5.0"
   spec.add_development_dependency "minitest-color"
   spec.add_development_dependency "guard"

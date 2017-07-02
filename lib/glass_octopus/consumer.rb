@@ -32,7 +32,7 @@ module GlassOctopus
       else
         logger.warn { "Rejected message: #{worker.message.to_h}" }
       end
-    rescue Concurrent::RejectedExecutionError => ex
+    rescue Concurrent::RejectedExecutionError
       logger.warn { "Rejected message: #{worker.message.to_h}" }
     end
   end
