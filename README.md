@@ -64,6 +64,8 @@ GlassOctopus.run(app) do |config|
 end
 ```
 
+Run it with `bundle exec ruby app.rb`
+
 For more examples look into the [examples](examples) directory.
 
 For the API documentation please see the [documentation site][rubydoc]
