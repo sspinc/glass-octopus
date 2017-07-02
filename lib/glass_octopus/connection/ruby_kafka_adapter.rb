@@ -1,10 +1,23 @@
 require "kafka"
 require "ostruct"
 require "glass_octopus/message"
+require "glass_octopus/connection/options_invalid"
 
 module GlassOctopus
   # Connection adapter that uses the {https://github.com/zendesk/ruby-kafka ruby-kafka} gem
   # to talk to Kafka 0.9+.
+  #
+  # @example
+  #   adapter = GlassOctopus::RubyKafkaAdapter.new do |kafka_config|
+  #     kafka_config.broker_list = %w[localhost:9092]
+  #     kafka_config.topic       = "mytopic"
+  #     kafka_config.group       = "mygroup"
+  #     kafka_config.kafka       = { logger: Logger.new(STDOUT) }
+  #   end
+  #
+  #   adapter.connect.fetch_message do |message|
+  #     p message
+  #   end
   #
   class RubyKafkaAdapter
     # A hash that hold the configuration set up in the initializer block.
@@ -24,10 +37,15 @@ module GlassOctopus
     #   * +kafka+: a hash passed on to Kafka.new
     #   * +consumer+: a hash passed on to kafka.consumer
     #   * +subscription+: a hash passed on to consumer.subscribe
+    #
+    #   Check the ruby-kafka documentation for driver specific configurations.
+    #
+    # @raise [OptionsInvalid]
     def initialize
       config = OpenStruct.new
       yield config
       @options = config.to_h
+      validate_options
 
       @kafka = nil
       @consumer = nil
@@ -83,6 +101,16 @@ module GlassOctopus
         group_id: options.fetch(:group),
         **options.fetch(:consumer, {})
       )
+    end
+
+    # @api private
+    def validate_options
+      errors = []
+      [:broker_list, :group, :topic].each do |key|
+        errors << "Missing key: #{key}" unless options.key?(key)
+      end
+
+      raise OptionsInvalid.new(errors) if errors.any?
     end
   end
 end
