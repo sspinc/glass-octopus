@@ -57,10 +57,14 @@ namespace :docker do
   end
 
   def docker_machine_ip
-    @docker_ip ||= begin
-                     active = %x{docker-machine active}.chomp
-                     %x{docker-machine ip #{active}}.chomp
-                   end
+    return @docker_ip if defined? @docker_ip
+
+    if ENV.key?("ADVERTISED_HOST")
+      @docker_ip = ENV["ADVERTISED_HOST"]
+    else
+      active = %x{docker-machine active}.chomp
+      @docker_ip = %x{docker-machine ip #{active}}.chomp
+    end
   end
 
   def wait(port)
