@@ -28,12 +28,12 @@ module GlassOctopus
 
     def submit(work)
       if executor.post(work) { |work| work.perform }
-        logger.debug { "Accepted message: #{worker.message.to_h}" }
+        logger.debug { "Accepted message: #{work.message.to_h}" }
       else
-        logger.warn { "Rejected message: #{worker.message.to_h}" }
+        logger.warn { "Rejected message: #{work.message.to_h}" }
       end
     rescue Concurrent::RejectedExecutionError
-      logger.warn { "Rejected message: #{worker.message.to_h}" }
+      logger.warn { "Rejected message: #{work.message.to_h}" }
     end
   end
 end

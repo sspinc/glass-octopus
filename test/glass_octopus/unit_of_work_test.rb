@@ -19,9 +19,9 @@ class GlassOctopus::UnitOfWorkTest < Minitest::Test
     processor = ->(ctx) { raise StandardError, "an error..." }
     app, io = new_app
     message = Object.new
-    worker = GlassOctopus::UnitOfWork.new(message, processor, app)
+    work = GlassOctopus::UnitOfWork.new(message, processor, app)
 
-    worker.perform
+    work.perform
     assert_match /StandardError - an error.../, io.string
   end
 
