@@ -27,8 +27,8 @@ EOF
 
   spec.add_development_dependency "rake", "~> 12.0"
   spec.add_development_dependency "minitest", "~> 5.0"
-  spec.add_development_dependency "minitest-color"
-  spec.add_development_dependency "guard"
-  spec.add_development_dependency "guard-minitest"
-  spec.add_development_dependency "terminal-notifier-guard"
+  spec.add_development_dependency "minitest-color", "~> 0"
+  spec.add_development_dependency "guard", "~> 2.14"
+  spec.add_development_dependency "guard-minitest", "~> 2.4"
+  spec.add_development_dependency "terminal-notifier-guard", "~> 1.7"
 end
