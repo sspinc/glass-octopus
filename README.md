@@ -7,7 +7,7 @@ A Kafka consumer framework. Like Rack but for Kafka.
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'glass-octopus'
+gem 'glass_octopus'
 ```
 
 And then execute:
@@ -16,7 +16,7 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install glass-octopus
+    $ gem install glass_octopus
 
 This gem requires Ruby 2.1 or higher.
 
@@ -27,14 +27,14 @@ Pick your adapter:
 * For Kafka 0.8.x use poseidon and poseidon-cluster
 
         # in your Gemfile
-        gem "glass-octopus"
+        gem "glass_octopus"
         gem "poseidon", github: "bpot/poseidon"
         gem "poseidon_cluster", github: "bsm/poseidon_cluster"
 
 * For Kafka 0.9+ use ruby-kafka
 
         # in your Gemfile
-        gem "glass-octopus"
+        gem "glass_octopus"
         gem "ruby-kafka"
 
 

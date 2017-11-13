@@ -4,7 +4,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'glass_octopus/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "glass-octopus"
+  spec.name          = "glass_octopus"
   spec.version       = GlassOctopus::VERSION
   spec.authors       = ["Tamás Michelberger"]
   spec.email         = ["tomi@secretsaucepartners.com"]
