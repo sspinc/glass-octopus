@@ -2,9 +2,6 @@
 
 A Kafka consumer framework. Like Rack but for Kafka.
 
-**WARNING!** This is very much work in progress and it is still unreleased.
-Proceed with caution.
-
 ## Installation
 
 Add this line to your application's Gemfile:

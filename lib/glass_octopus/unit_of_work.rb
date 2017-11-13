@@ -2,7 +2,7 @@ require "glass_octopus/context"
 
 module GlassOctopus
   # Unit of work. Builds a context for a message and runs it through the
-  # middleware stack. It catches and logs all loggerlication level exceptions.
+  # middleware stack. It catches and logs all application level exceptions.
   #
   # @api private
   class UnitOfWork
