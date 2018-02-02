@@ -63,7 +63,7 @@ end
 
 Run it with `bundle exec ruby app.rb`
 
-For more examples look into the [examples](examples) directory.
+For more examples look into the [example](example) directory.
 
 For the API documentation please see the [documentation site][rubydoc]
 
