@@ -1,5 +1,10 @@
-require 'avro_turf/messaging'
 require "delegate"
+
+begin
+  require "avro_turf/messaging"
+rescue LoadError
+  raise "Can't find 'avro_turf' gem. Please add it to your Gemfile or install it."
+end
 
 module GlassOctopus
   module Middleware
