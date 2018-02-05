@@ -4,11 +4,9 @@ require "delegate"
 module GlassOctopus
   module Middleware
     class AvroParser
-      def initialize(app, schema_registry_url, options={})
+      def initialize(app, schema_registry_url)
         @app = app
-        @klass = options.delete(:class)
         @decoder = AvroTurf::Messaging.new(registry_url: schema_registry_url)
-        @options = options
       end
 
       def call(ctx)
