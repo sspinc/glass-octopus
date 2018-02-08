@@ -63,6 +63,26 @@ end
 
 Run it with `bundle exec ruby app.rb`
 
+### Handling Avro messages with Schema Registry
+
+Glass Octopus can be used with Avro messages validated against a schema. For this, you need a running [Schema Registry](https://docs.confluent.io/current/schema-registry/docs/index.html) service.  
+You also need to have the `avro_turf` gem installed.
+
+```
+# in your Gemfile
+gem "avro_turf"
+```
+
+Add the `AvroParser` middleware with the Schema Registry URL to your app.
+
+```ruby
+# in app.rb
+app = GlassOctopus.build do
+  use GlassOctopus::Middleware::AvroParser, "http://schema_registry_url:8081"
+  ...
+end
+```
+
 For more examples look into the [examples](examples) directory.
 
 For the API documentation please see the [documentation site][rubydoc]
