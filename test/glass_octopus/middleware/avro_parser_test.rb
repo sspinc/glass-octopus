@@ -12,14 +12,14 @@ class GlassOctopus::AvroParserTest < Minitest::Test
     @registry_url = "http://registry.example.com"
     stub_request(:any, /^#{@registry_url}/).to_rack(FakeConfluentSchemaRegistryServer)
     FakeConfluentSchemaRegistryServer.clear
-    @avro = AvroTurf::Messaging.new(registry_url: @registry_url, schemas_path: 'test/glass_octopus/middleware/schemas')
+    @avro = AvroTurf::Messaging.new(registry_url: @registry_url, schemas_path: 'test/fixtures/schemas')
   end
 
   def test_avro_parsed_into_a_hash
     instance = setup_middleware
 
-    hash = {"key" => "value"}
-    data = @avro.encode(hash, schema_name: 'test')
+    hash = {"full_name" => "Wonder Woman"}
+    data = @avro.encode(hash, schema_name: 'person')
     ctx = instance.call(build_context(data))
 
     assert_equal(hash, ctx.params)

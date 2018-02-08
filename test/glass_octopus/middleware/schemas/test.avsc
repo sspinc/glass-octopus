@@ -1,7 +1,0 @@
-{
-  "name": "test",
-  "type": "record",
-  "fields": [
-    {"name": "key", "type": "string"}
-  ]
-}

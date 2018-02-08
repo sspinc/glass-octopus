@@ -1,0 +1,7 @@
+{
+  "name": "person",
+  "type": "record",
+  "fields": [
+    {"name": "full_name", "type": "string"}
+  ]
+}
