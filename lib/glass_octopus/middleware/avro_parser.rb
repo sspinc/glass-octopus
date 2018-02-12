@@ -9,9 +9,9 @@ end
 module GlassOctopus
   module Middleware
     class AvroParser
-      def initialize(app, schema_registry_url)
+      def initialize(app, schema_registry_url, options={})
         @app = app
-        @decoder = AvroTurf::Messaging.new(registry_url: schema_registry_url)
+        @decoder = AvroTurf::Messaging.new(registry_url: schema_registry_url, logger: options[:logger])
       end
 
       def call(ctx)
