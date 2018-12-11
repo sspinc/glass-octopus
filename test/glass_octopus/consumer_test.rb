@@ -1,6 +1,5 @@
 require "test_helper"
 require "support/in_memory_connection"
-require "support/null_logger"
 require "concurrent"
 
 require "glass_octopus/message"
