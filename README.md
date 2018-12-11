@@ -24,19 +24,13 @@ This gem requires Ruby 2.1 or higher.
 
 Pick your adapter:
 
-* For Kafka 0.8.x use poseidon and poseidon-cluster
-
-        # in your Gemfile
-        gem "glass_octopus"
-        gem "poseidon", github: "bpot/poseidon"
-        gem "poseidon_cluster", github: "bsm/poseidon_cluster"
-
-* For Kafka 0.9+ use ruby-kafka
+* ruby-kafka
 
         # in your Gemfile
         gem "glass_octopus"
         gem "ruby-kafka"
 
+Currently only `ruby-kafka` is supported.
 
 ```ruby
 # in app.rb
@@ -65,7 +59,7 @@ Run it with `bundle exec ruby app.rb`
 
 ### Handling Avro messages with Schema Registry
 
-Glass Octopus can be used with Avro messages validated against a schema. For this, you need a running [Schema Registry](https://docs.confluent.io/current/schema-registry/docs/index.html) service.  
+Glass Octopus can be used with Avro messages validated against a schema. For this, you need a running [Schema Registry](https://docs.confluent.io/current/schema-registry/docs/index.html) service.
 You also need to have the `avro_turf` gem installed.
 
 ```

@@ -30,11 +30,10 @@ module GlassOctopus
 
     # Creates a new adapter
     #
-    # @param type [:poseidon, :ruby_kafka] type of the adapter to use
+    # @param type [:ruby_kafka] type of the adapter to use
     # @yield a block to conigure the adapter
     # @yieldparam config configuration object
     #
-    # @see PoseidonAdapter
     # @see RubyKafkaAdapter
     def adapter(type, &block)
       self.connection_adapter = build_adapter(type, &block)
@@ -48,9 +47,6 @@ module GlassOctopus
     # @api private
     def build_adapter(type, &block)
       case type
-      when :poseidon
-        require "glass_octopus/connection/poseidon_adapter"
-        PoseidonAdapter.new(&block)
       when :ruby_kafka
         require "glass_octopus/connection/ruby_kafka_adapter"
         RubyKafkaAdapter.new(&block)
