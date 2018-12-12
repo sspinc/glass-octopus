@@ -28,9 +28,49 @@ module GlassOctopus
       self.shutdown_timeout = 10
     end
 
-    # Creates a new adapter
+    # Configures a new adapter.
     #
-    # @param type [:ruby_kafka] type of the adapter to use
+    # When a class is passed as +type+ the class will be instantiated.
+    #
+    # @example Using a custom adapter class
+    #   config.adapter(MyAdapter) do |c|
+    #     c.bootstrap_servers = %w[localhost:9092]
+    #     c.group_id = "mygroup"
+    #     c.topic = "mytopic"
+    #   end
+    #
+    #   class MyAdapter
+    #     def initialize
+    #       @options = OpenStruct.new
+    #       yield @options
+    #     end
+    #
+    #     def fetch_message
+    #       @consumer.each do |fetched_message|
+    #         message = Message.new(
+    #           fetched_message.topic,
+    #          fetched_message.partition,
+    #          fetched_message.offset,
+    #          fetched_message.key,
+    #          fetched_message.value
+    #        )
+    #
+    #         yield message
+    #       end
+    #     end
+    #
+    #     def connect
+    #       # Connect to Kafka...
+    #       @consumer = ...
+    #       self
+    #     end
+    #
+    #     def close
+    #       @consumer.close
+    #     end
+    #   end
+    #
+    # @param type [:ruby_kafka, Class] type of the adapter to use
     # @yield a block to conigure the adapter
     # @yieldparam config configuration object
     #
