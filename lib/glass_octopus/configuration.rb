@@ -50,6 +50,8 @@ module GlassOctopus
       when :ruby_kafka
         require "glass_octopus/connection/ruby_kafka_adapter"
         RubyKafkaAdapter.new(&block)
+      when Class
+        type.new(&block)
       else
         raise ArgumentError, "Unknown adapter: #{type}"
       end
