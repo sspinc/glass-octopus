@@ -17,8 +17,8 @@ module GlassOctopus
     def perform
       processor.call(Context.new(message, logger))
     rescue => ex
-      logger.logger.error("#{ex.class} - #{ex.message}:")
-      logger.logger.error(ex.backtrace.join("\n")) if ex.backtrace
+      logger.error("#{ex.class} - #{ex.message}:")
+      logger.error(ex.backtrace.join("\n")) if ex.backtrace
     end
   end
 end
