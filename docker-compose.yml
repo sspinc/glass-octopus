@@ -1,25 +1,22 @@
 version: '3'
 services:
-  kafka_0_8:
-    image: sspinc/kafka
+  kafka:
+    image: confluentinc/cp-kafka:5.0.1
     environment:
-      - ADVERTISED_HOST=${ADVERTISED_HOST}
-      - ADVERTISED_PORT=${KAFKA_0_8_PORT}
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper:32181
+      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://localhost:29092
+      - KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1
     ports:
-      - ${KAFKA_0_8_PORT}:${KAFKA_0_8_PORT}
-      - ${ZOOKEEPER_EXTERNAL_PORT}:2181
-  kafka_0_10:
-    image: ches/kafka:0.10.2.1
-    environment:
-      - KAFKA_ADVERTISED_HOST_NAME=${ADVERTISED_HOST}
-      - KAFKA_ADVERTISED_PORT=${KAFKA_0_10_PORT}
-      - KAFKA_PORT=${KAFKA_0_10_PORT}
-      - ZOOKEEPER_IP=zookeeper
-    ports:
-      - ${KAFKA_0_10_PORT}:${KAFKA_0_10_PORT}
-    links:
+      - 29092:29092
+    depends_on:
       - zookeeper
   zookeeper:
-    image: zookeeper:3.4
+    image: confluentinc/cp-zookeeper:5.0.1
+    environment:
+      - ZOOKEEPER_CLIENT_PORT=32181
+      - ZOOKEEPER_TICK_TIME=2000
+      - ZOOKEEPER_SYNC_LIMIT=2
     expose:
-      - "2181"
+      - 32181/tcp
+    ports:
+      - 32181:32181

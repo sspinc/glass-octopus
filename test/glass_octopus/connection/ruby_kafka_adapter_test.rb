@@ -6,6 +6,7 @@ require "glass_octopus/connection/ruby_kafka_adapter"
 class GlassOctopus::RubyKafkaAdapterTest < Minitest::Test
   TOPIC = "test_topic".freeze
   GROUP = "test_group".freeze
+  KAFKA_HOST = "localhost:29092"
 
   attr_reader :client, :producer
 
@@ -25,7 +26,7 @@ class GlassOctopus::RubyKafkaAdapterTest < Minitest::Test
     integration_test!
 
     send_message("key", "value")
-    adapter = create_adapter
+    adapter = create_adapter.connect
 
     q = Queue.new
     Thread.new { q.pop; adapter.close }
@@ -40,16 +41,16 @@ class GlassOctopus::RubyKafkaAdapterTest < Minitest::Test
   end
 
   def send_message(key, value)
-    @client ||= Kafka.new(seed_brokers: [Docker.kafka_0_10_host])
+    @client ||= Kafka.new(seed_brokers: [KAFKA_HOST])
     @client.deliver_message(value, key: key, topic: TOPIC, partition: 0)
   end
 
   def create_adapter
     GlassOctopus::RubyKafkaAdapter.new do |config|
-      config.broker_list = [Docker.kafka_0_10_host]
+      config.broker_list = [KAFKA_HOST]
       config.topic = TOPIC
       config.group = GROUP
-    end.connect
+    end
   end
 end
 

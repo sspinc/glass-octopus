@@ -1,7 +1,6 @@
 require "minitest/autorun"
 require "minitest/color"
 require "minitest/guard_minitest_plugin"
-require "support/docker"
 require "sinatra"
 require "webmock/minitest"
 

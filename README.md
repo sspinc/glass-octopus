@@ -83,11 +83,11 @@ For the API documentation please see the [documentation site][rubydoc]
 
 ## Development
 
-Install docker and docker-compose to run Kafka and zookeeper for tests.
+Install docker and docker-compose to run Kafka and Zookeeper for tests.
 
-1. Set the `ADVERTISED_HOST` environment variable
-2. Run `rake docker:up`
-3. Now you can run the tests.
+Start Kafka and Zookeeper
+
+    $ docker-compose up
 
 Run all tests including integration tests:
 
@@ -97,7 +97,7 @@ Running tests without integration tests:
 
     $ rake # or rake test
 
-When you are done run `rake docker:down` to clean up docker containers.
+When you are done run `docker-compose down` to clean up docker containers.
 
 ## License
 
