@@ -22,6 +22,6 @@ GlassOctopus.run(app) do |config|
   config.adapter :ruby_kafka do |kafka|
     kafka.broker_list = array_from_env("KAFKA_BROKER_LIST", default: %w[localhost:9092])
     kafka.topic       = ENV.fetch("KAFKA_TOPIC", "mytopic")
-    kafka.group       = ENV.fetch("KAFKA_GROUP", "mygroup")
+    kafka.group_id    = ENV.fetch("KAFKA_GROUP", "mygroup")
   end
 end

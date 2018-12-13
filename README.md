@@ -49,7 +49,7 @@ GlassOctopus.run(app) do |config|
   config.adapter :ruby_kafka do |kafka|
     kafka.broker_list = %[localhost:9092]
     kafka.topic       = "mytopic"
-    kafka.group       = "mygroup"
+    kafka.group_id    = "mygroup"
   end
 end
 ```

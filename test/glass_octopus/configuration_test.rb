@@ -17,7 +17,7 @@ class GlassOctopus::ConfigurationTest < Minitest::Test
 
     adapter = config.build_adapter(:ruby_kafka) do |c|
       c.broker_list = %w[localhost:9092]
-      c.group = "test"
+      c.group_id = "test"
       c.topic = "test-topic"
     end
 

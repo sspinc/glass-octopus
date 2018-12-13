@@ -18,7 +18,7 @@ class GlassOctopus::RubyKafkaAdapterTest < Minitest::Test
     ex = assert_raises(GlassOctopus::OptionsInvalid) { GlassOctopus::RubyKafkaAdapter.new {} }
 
     assert_includes ex.errors, "Missing key: broker_list"
-    assert_includes ex.errors, "Missing key: group"
+    assert_includes ex.errors, "Missing key: group_id"
     assert_includes ex.errors, "Missing key: topic"
   end
 
@@ -49,7 +49,7 @@ class GlassOctopus::RubyKafkaAdapterTest < Minitest::Test
     GlassOctopus::RubyKafkaAdapter.new do |config|
       config.broker_list = [KAFKA_HOST]
       config.topic = TOPIC
-      config.group = GROUP
+      config.group_id = GROUP
     end
   end
 end
