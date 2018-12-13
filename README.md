@@ -57,6 +57,10 @@ end
 
 Run it with `bundle exec ruby app.rb`
 
+For more examples look into the [example](example) directory.
+
+For the API documentation please see the [documentation site][rubydoc]
+
 ### Handling Avro messages with Schema Registry
 
 Glass Octopus can be used with Avro messages validated against a schema. For this, you need a running [Schema Registry](https://docs.confluent.io/current/schema-registry/docs/index.html) service.
@@ -73,13 +77,89 @@ Add the `AvroParser` middleware with the Schema Registry URL to your app.
 # in app.rb
 app = GlassOctopus.build do
   use GlassOctopus::Middleware::AvroParser, "http://schema_registry_url:8081"
-  ...
+  # ...
 end
 ```
 
-For more examples look into the [example](example) directory.
+### Supported middleware
 
-For the API documentation please see the [documentation site][rubydoc]
+* ActiveRecord
+
+    Return any active connection to the pool after the message has been processed.
+
+    ```ruby
+    app = GlassOctopus.build do
+      use GlassOctopus::Middleware::ActiveRecord
+      # ...
+    end
+    ```
+
+* New Relic
+
+    Record message processing as background transactions. Also captures uncaught exceptions.
+
+    ```ruby
+    app = GlassOctopus.build do
+      use GlassOctopus::Middleware::NewRelic, MyConsumer
+      # ...
+    end
+    ```
+
+* Sentry
+
+    Report uncaught exceptions to Sentry.
+
+    ```ruby
+    app = GlassOctopus.build do
+      use GlassOctopus::Middleware::Sentry
+      # ...
+    end
+    ```
+
+* Common logger
+
+    Log processed messages and runtime of the processing.
+
+    ```ruby
+    app = GlassOctopus.build do
+      use GlassOctopus::Middleware::CommonLogger
+      # ...
+    end
+    ```
+
+* Parse messages as JSON
+
+    Parse message value as JSON. The resulting hash is placed in `context.params`.
+
+    ```ruby
+    app = GlassOctopus.build do
+      use GlassOctopus::Middleware::JsonParser
+      # ...
+      run MyConsumer
+    end
+
+    class MyConsumer
+      def call(ctx)
+        puts ctx.params # message value parsed as JSON
+        puts ctx.message # Raw unaltered message
+      end
+    end
+    ```
+
+    Optionally you can specify a class to be instantiated with the message hash.
+
+    ```ruby
+    app = GlassOctopus.build do
+      use GlassOctopus::Middleware::JsonParser, class: MyMessage
+      run MyConsumer
+    end
+
+    class MyMessage
+      def initialize(attributes)
+        attributes.each { |k,v| public_send("#{k}=", v) }
+      end
+    end
+    ```
 
 ## Development
 
