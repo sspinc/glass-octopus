@@ -30,7 +30,7 @@ Pick your adapter:
         gem "glass_octopus"
         gem "ruby-kafka"
 
-Currently only `ruby-kafka` is supported.
+Currently only `ruby-kafka` is supported out of the box. If you need to use another adapter you can pass a class to `config.adapter`. See documentation for `GlassOctopus::Configuration#adapter`.
 
 ```ruby
 # in app.rb
@@ -50,6 +50,7 @@ GlassOctopus.run(app) do |config|
     kafka.broker_list = %[localhost:9092]
     kafka.topic       = "mytopic"
     kafka.group_id    = "mygroup"
+    kafka.client_id   = "myapp"
   end
 end
 ```
@@ -61,7 +62,7 @@ Run it with `bundle exec ruby app.rb`
 Glass Octopus can be used with Avro messages validated against a schema. For this, you need a running [Schema Registry](https://docs.confluent.io/current/schema-registry/docs/index.html) service.
 You also need to have the `avro_turf` gem installed.
 
-```
+```ruby
 # in your Gemfile
 gem "avro_turf"
 ```
