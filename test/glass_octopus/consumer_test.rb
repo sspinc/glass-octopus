@@ -1,6 +1,5 @@
 require "test_helper"
 require "support/in_memory_connection"
-require "concurrent"
 
 require "glass_octopus/message"
 require "glass_octopus/consumer"
@@ -38,11 +37,22 @@ class GlassOctopus::ConsumerTest < Minitest::Test
     assert connection.verify
   end
 
-  def new_consumer(connection, processor=nil)
-    processor ||= Proc.new {}
-    logger = NullLogger.new
-    executor = Concurrent::ImmediateExecutor.new
+  def test_exceptions_are_caught_and_logged
+    processor = ->(ctx) { raise StandardError, "test error" }
+    io = StringIO.new
+    logger = Logger.new(io)
+    connection = InMemoryConnection.new([GlassOctopus::Message.new])
+    consumer = new_consumer(connection, processor, logger)
 
-    GlassOctopus::Consumer.new(connection, processor, executor, logger)
+    consumer.run
+
+    assert_match /StandardError - test error/, io.string
+  end
+
+  def new_consumer(connection, processor=nil, logger=nil)
+    processor ||= Proc.new {}
+    logger ||= NullLogger.new
+
+    GlassOctopus::Consumer.new(connection, processor, logger)
   end
 end

@@ -15,19 +15,13 @@ module GlassOctopus
     end
 
     def run
-      @consumer = Consumer.new(connection, processor, config.executor, logger)
+      @consumer = Consumer.new(connection, processor, config.logger)
       @consumer.run
     end
 
-    def shutdown(timeout=nil)
-      timeout ||= config.shutdown_timeout
-      @consumer.shutdown(timeout) if @consumer
-
+    def shutdown
+      @consumer.shutdown if @consumer
       nil
-    end
-
-    def logger
-      config.logger
     end
 
     def connection

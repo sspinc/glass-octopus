@@ -1,39 +1,42 @@
-require "glass_octopus/unit_of_work"
+require "glass_octopus/context"
 
 module GlassOctopus
   # @api private
   class Consumer
-    attr_reader :connection, :processor, :executor, :logger
+    attr_reader :connection, :processor, :logger, :thread
 
-    def initialize(connection, processor, executor, logger)
+    def initialize(connection, processor,  logger)
       @connection = connection
       @processor  = processor
-      @executor   = executor
       @logger     = logger
+    end
+
+    def start
+      @thread = Thread.new { run }
+      nil
+    end
+
+    def healthy?
+      thread.nil? ? true : thread.alive?
     end
 
     def run
       connection.fetch_message do |message|
-        work = UnitOfWork.new(message, processor, logger)
-        submit(work)
+        process_message(message)
       end
     end
 
-    def shutdown(timeout=10)
+    def shutdown
       connection.close
-      executor.shutdown
-      logger.info("Waiting for workers to terminate...")
-      executor.wait_for_termination(timeout)
     end
 
-    def submit(work)
-      if executor.post(work) { |work| work.perform }
-        logger.debug { "Accepted message: #{work.message.to_h}" }
-      else
-        logger.warn { "Rejected message: #{work.message.to_h}" }
-      end
-    rescue Concurrent::RejectedExecutionError
-      logger.warn { "Rejected message: #{work.message.to_h}" }
+    # Unit of work. Builds a context for a message and runs it through the
+    # middleware stack. It catches and logs all application level exceptions.
+    def process_message(message)
+      processor.call(Context.new(message, logger))
+    rescue => ex
+      logger.error("#{ex.class} - #{ex.message}:")
+      logger.error(ex.backtrace.join("\n")) if ex.backtrace
     end
   end
 end
