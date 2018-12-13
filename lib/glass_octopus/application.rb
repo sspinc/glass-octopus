@@ -24,6 +24,10 @@ module GlassOctopus
       nil
     end
 
+    def logger
+      config.logger
+    end
+
     def connection
       config.connection_adapter.connect
     end
