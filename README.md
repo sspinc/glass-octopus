@@ -50,7 +50,6 @@ GlassOctopus.run(app) do |config|
     kafka.broker_list = %[localhost:9092]
     kafka.topic       = "mytopic"
     kafka.group       = "mygroup"
-    kafka.client      = { logger: config.logger }
   end
 end
 ```

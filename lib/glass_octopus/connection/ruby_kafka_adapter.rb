@@ -12,7 +12,6 @@ module GlassOctopus
   #     kafka_config.broker_list = %w[localhost:9092]
   #     kafka_config.topic       = "mytopic"
   #     kafka_config.group       = "mygroup"
-  #     kafka_config.kafka       = { logger: Logger.new(STDOUT) }
   #   end
   #
   #   adapter.connect.fetch_message do |message|
@@ -41,10 +40,12 @@ module GlassOctopus
     #   Check the ruby-kafka documentation for driver specific configurations.
     #
     # @raise [OptionsInvalid]
-    def initialize
+    def initialize(logger=nil)
       config = OpenStruct.new
       yield config
+
       @options = config.to_h
+      @options[:logger] ||= logger
       validate_options
 
       @kafka = nil
@@ -89,10 +90,8 @@ module GlassOctopus
 
     # @api private
     def connect_to_kafka
-      Kafka.new(
-        seed_brokers: options.fetch(:broker_list),
-        **options.fetch(:client, {})
-      )
+      client_options = { logger: @options[:logger] }.merge(options.fetch(:client, {}))
+      Kafka.new(seed_brokers: options.fetch(:broker_list), **client_options)
     end
 
     # @api private
