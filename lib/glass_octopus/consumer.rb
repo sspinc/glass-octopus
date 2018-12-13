@@ -3,21 +3,12 @@ require "glass_octopus/context"
 module GlassOctopus
   # @api private
   class Consumer
-    attr_reader :connection, :processor, :logger, :thread
+    attr_reader :connection, :processor, :logger
 
     def initialize(connection, processor,  logger)
       @connection = connection
       @processor  = processor
       @logger     = logger
-    end
-
-    def start
-      @thread = Thread.new { run }
-      nil
-    end
-
-    def healthy?
-      thread.nil? ? true : thread.alive?
     end
 
     def run
