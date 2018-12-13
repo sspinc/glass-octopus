@@ -3,14 +3,15 @@ require "logger"
 module GlassOctopus
   # Configuration for the application.
   #
-  # @!attribute [rw] connection_adapter
-  #   Connection adapter that connects to the Kafka.
+  # @!attribute [r] connection_adapter
+  #   The configured connection adapter.
+  #   @see #adapter
   # @!attribute [rw] logger
   #   A standard library compatible logger for the application. By default it
   #   logs to the STDOUT.
   class Configuration
-    attr_accessor :connection_adapter,
-                  :logger
+    attr_accessor :logger
+    attr_reader :connection_adapter
 
     def initialize
       self.logger = Logger.new(STDOUT).tap { |l| l.level = Logger::INFO }
@@ -64,7 +65,7 @@ module GlassOctopus
     #
     # @see RubyKafkaAdapter
     def adapter(type, &block)
-      self.connection_adapter = build_adapter(type, &block)
+      @connection_adapter = build_adapter(type, &block)
     end
 
     # @api private

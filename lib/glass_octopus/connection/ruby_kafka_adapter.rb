@@ -30,6 +30,7 @@ module GlassOctopus
     #   * +broker_list+: list of Kafka broker addresses
     #   * +topic+: name of the topic to subscribe to
     #   * +group_id+: name of the consumer group
+    #   * +client_id+: the identifier for this application
     #
     #   Optional configuration:
     #
@@ -91,7 +92,9 @@ module GlassOctopus
 
     # @api private
     def connect_to_kafka
-      client_options = { logger: @options[:logger] }.merge(options.fetch(:client, {}))
+      client_options = options.fetch(:client, {}).merge(logger: @options[:logger])
+      client_options.merge!(client_id: @options[:client_id]) if @options.key?(:client_id)
+
       Kafka.new(seed_brokers: options.fetch(:broker_list), **client_options)
     end
 
