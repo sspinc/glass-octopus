@@ -1,59 +1,81 @@
 require "logger"
-require "concurrent"
-
-require "glass_octopus/bounded_executor"
 
 module GlassOctopus
   # Configuration for the application.
   #
-  # @!attribute [rw] connection_adapter
-  #   Connection adapter that connects to the Kafka.
-  # @!attribute [rw] executor
-  #   A thread pool executor to process messages concurrently. Defaults to
-  #   a {BoundedExecutor} with 25 threads.
+  # @!attribute [r] connection_adapter
+  #   The configured connection adapter.
+  #   @see #adapter
   # @!attribute [rw] logger
   #   A standard library compatible logger for the application. By default it
   #   logs to the STDOUT.
-  # @!attribute [rw] shutdown_timeout
-  #   Number of seconds to wait for the processing to finish before shutting down.
   class Configuration
-    attr_accessor :connection_adapter,
-                  :executor,
-                  :logger,
-                  :shutdown_timeout
+    attr_accessor :logger
+    attr_reader :connection_adapter
 
     def initialize
       self.logger = Logger.new(STDOUT).tap { |l| l.level = Logger::INFO }
-      self.executor = default_executor
-      self.shutdown_timeout = 10
     end
 
-    # Creates a new adapter
+    # Configures a new adapter.
     #
-    # @param type [:poseidon, :ruby_kafka] type of the adapter to use
+    # When a class is passed as +type+ the class will be instantiated.
+    #
+    # @example Using a custom adapter class
+    #   config.adapter(MyAdapter) do |c|
+    #     c.bootstrap_servers = %w[localhost:9092]
+    #     c.group_id = "mygroup"
+    #     c.topic = "mytopic"
+    #   end
+    #
+    #   class MyAdapter
+    #     def initialize
+    #       @options = OpenStruct.new
+    #       yield @options
+    #     end
+    #
+    #     def fetch_message
+    #       @consumer.each do |fetched_message|
+    #         message = Message.new(
+    #           fetched_message.topic,
+    #          fetched_message.partition,
+    #          fetched_message.offset,
+    #          fetched_message.key,
+    #          fetched_message.value
+    #        )
+    #
+    #         yield message
+    #       end
+    #     end
+    #
+    #     def connect
+    #       # Connect to Kafka...
+    #       @consumer = ...
+    #       self
+    #     end
+    #
+    #     def close
+    #       @consumer.close
+    #     end
+    #   end
+    #
+    # @param type [:ruby_kafka, Class] type of the adapter to use
     # @yield a block to conigure the adapter
     # @yieldparam config configuration object
     #
-    # @see PoseidonAdapter
     # @see RubyKafkaAdapter
     def adapter(type, &block)
-      self.connection_adapter = build_adapter(type, &block)
-    end
-
-    # @api private
-    def default_executor
-      BoundedExecutor.new(Concurrent::FixedThreadPool.new(25), limit: 25)
+      @connection_adapter = build_adapter(type, &block)
     end
 
     # @api private
     def build_adapter(type, &block)
       case type
-      when :poseidon
-        require "glass_octopus/connection/poseidon_adapter"
-        PoseidonAdapter.new(&block)
       when :ruby_kafka
         require "glass_octopus/connection/ruby_kafka_adapter"
-        RubyKafkaAdapter.new(&block)
+        RubyKafkaAdapter.new(logger, &block)
+      when Class
+        type.new(&block)
       else
         raise ArgumentError, "Unknown adapter: #{type}"
       end

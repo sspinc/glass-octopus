@@ -11,8 +11,7 @@ module GlassOctopus
   #   adapter = GlassOctopus::RubyKafkaAdapter.new do |kafka_config|
   #     kafka_config.broker_list = %w[localhost:9092]
   #     kafka_config.topic       = "mytopic"
-  #     kafka_config.group       = "mygroup"
-  #     kafka_config.kafka       = { logger: Logger.new(STDOUT) }
+  #     kafka_config.group_id    = "mygroup"
   #   end
   #
   #   adapter.connect.fetch_message do |message|
@@ -30,7 +29,8 @@ module GlassOctopus
     #
     #   * +broker_list+: list of Kafka broker addresses
     #   * +topic+: name of the topic to subscribe to
-    #   * +group+: name of the consumer group
+    #   * +group_id+: name of the consumer group
+    #   * +client_id+: the identifier for this application
     #
     #   Optional configuration:
     #
@@ -41,10 +41,13 @@ module GlassOctopus
     #   Check the ruby-kafka documentation for driver specific configurations.
     #
     # @raise [OptionsInvalid]
-    def initialize
+    def initialize(logger=nil)
       config = OpenStruct.new
       yield config
+
       @options = config.to_h
+      @options[:group_id] ||= @options[:group]
+      @options[:logger] ||= logger
       validate_options
 
       @kafka = nil
@@ -89,16 +92,16 @@ module GlassOctopus
 
     # @api private
     def connect_to_kafka
-      Kafka.new(
-        seed_brokers: options.fetch(:broker_list),
-        **options.fetch(:client, {})
-      )
+      client_options = options.fetch(:client, {}).merge(logger: @options[:logger])
+      client_options.merge!(client_id: @options[:client_id]) if @options.key?(:client_id)
+
+      Kafka.new(seed_brokers: options.fetch(:broker_list), **client_options)
     end
 
     # @api private
     def create_consumer(kafka)
       kafka.consumer(
-        group_id: options.fetch(:group),
+        group_id: options.fetch(:group_id),
         **options.fetch(:consumer, {})
       )
     end
@@ -106,8 +109,8 @@ module GlassOctopus
     # @api private
     def validate_options
       errors = []
-      [:broker_list, :group, :topic].each do |key|
-        errors << "Missing key: #{key}" unless options.key?(key)
+      [:broker_list, :group_id, :topic].each do |key|
+        errors << "Missing key: #{key}" unless options[key]
       end
 
       raise OptionsInvalid.new(errors) if errors.any?

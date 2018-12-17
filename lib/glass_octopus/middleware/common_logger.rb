@@ -23,8 +23,12 @@ module GlassOctopus
         runtime = Benchmark.realtime { yield }
         runtime *= 1000 # Convert to milliseconds
 
-        logger.send(@log_level, format(FORMAT,
-          ctx.message.topic, ctx.message.partition, ctx.message.key, runtime))
+        logger.send(@log_level) { format_message(ctx, runtime) }
+      end
+
+      def format_message(ctx, runtime)
+        format(FORMAT,
+          ctx.message.topic, ctx.message.partition, ctx.message.key, runtime)
       end
     end
   end

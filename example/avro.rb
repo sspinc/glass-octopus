@@ -17,10 +17,12 @@ end
 
 
 GlassOctopus.run(app) do |config|
+  config.logger = Logger.new(STDOUT)
+
   config.adapter :ruby_kafka do |kafka|
     kafka.broker_list = array_from_env("KAFKA_BROKER_LIST", default: %w[localhost:9092])
     kafka.topic       = ENV.fetch("KAFKA_TOPIC", "mytopic")
-    kafka.group       = ENV.fetch("KAFKA_GROUP", "mygroup")
-    kafka.client      = { logger: config.logger }
+    kafka.group_id    = ENV.fetch("KAFKA_GROUP", "mygroup")
+    kafka.client_id   = "myapp"
   end
 end

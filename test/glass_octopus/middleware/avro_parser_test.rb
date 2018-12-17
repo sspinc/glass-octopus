@@ -1,5 +1,5 @@
 require 'avro_turf/test/fake_confluent_schema_registry_server'
-require 'webmock/rspec'
+require 'webmock/minitest'
 
 require "test_helper"
 require "ostruct"
@@ -9,10 +9,14 @@ require "glass_octopus/middleware/avro_parser"
 
 class GlassOctopus::AvroParserTest < Minitest::Test
   def setup
+    @logger = NullLogger.new
     @registry_url = "http://registry.example.com"
     stub_request(:any, /^#{@registry_url}/).to_rack(FakeConfluentSchemaRegistryServer)
     FakeConfluentSchemaRegistryServer.clear
-    @avro = AvroTurf::Messaging.new(registry_url: @registry_url, schemas_path: 'test/fixtures/schemas')
+    @avro = AvroTurf::Messaging.new(
+      registry_url: @registry_url,
+      schemas_path: 'test/fixtures/schemas',
+      logger: @logger)
   end
 
   def test_avro_parsed_into_a_hash
@@ -27,7 +31,7 @@ class GlassOctopus::AvroParserTest < Minitest::Test
 
   def setup_middleware()
     next_middleware = ->(ctx) { ctx }
-    GlassOctopus::Middleware::AvroParser.new(next_middleware, @registry_url)
+    GlassOctopus::Middleware::AvroParser.new(next_middleware, @registry_url, logger: @logger)
   end
 
   def build_context(data)
