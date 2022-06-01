@@ -20,7 +20,12 @@ module GlassOctopus
       end
 
       def call(ctx)
-        perform_action_with_newrelic_trace(@options) do
+        options = @options.merge(params: {
+          topic: ctx.message.topic,
+          partition: ctx.message.partition,
+          offset: ctx.message.offset,
+        })
+        perform_action_with_newrelic_trace(options) do
           @app.call(ctx)
         end
       rescue Exception => ex
