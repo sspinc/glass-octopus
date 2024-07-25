@@ -3,7 +3,7 @@ require "benchmark"
 module GlassOctopus
   module Middleware
     class CommonLogger
-      FORMAT = "Processed message. topic=%s, partition=%d, key=%s, runtime=%fms".freeze
+      FORMAT = "Processed message. topic=%s partition=%d offset=%d key=%s runtime=%fms".freeze
 
       def initialize(app, logger=nil, log_level=:info)
         @app = app
@@ -27,8 +27,8 @@ module GlassOctopus
       end
 
       def format_message(ctx, runtime)
-        format(FORMAT,
-          ctx.message.topic, ctx.message.partition, ctx.message.key, runtime)
+        format(FORMAT, ctx.message.topic,
+               ctx.message.partition, ctx.message.offset, ctx.message.key, runtime)
       end
     end
   end

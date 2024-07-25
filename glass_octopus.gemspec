@@ -29,8 +29,8 @@ EOF
   spec.add_development_dependency "guard", "~> 2.14"
   spec.add_development_dependency "guard-minitest", "~> 2.4"
   spec.add_development_dependency "terminal-notifier-guard", "~> 1.7"
-  spec.add_development_dependency "ruby-kafka", "~> 0.7.0"
-  spec.add_development_dependency "avro_turf", "~> 0.8.0"
+  spec.add_development_dependency "ruby-kafka", "~> 1.0"
+  spec.add_development_dependency "avro_turf", "~> 1.0"
   spec.add_development_dependency "sinatra", ">= 2.2.0"
   spec.add_development_dependency "webmock", "~> 3.3.0"
 end

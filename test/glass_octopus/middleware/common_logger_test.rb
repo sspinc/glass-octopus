@@ -21,6 +21,13 @@ class GlassOctopus::CommonLoggerTest < Minitest::Test
     assert_match /Processed message/, io.string
   end
 
+  def test_include_offset_in_message
+    mw, io = setup_common_logger
+    mw.call(Context.new(build_message))
+
+    assert_match /offset=\d+/, io.string
+  end
+
   def setup_common_logger
     io = StringIO.new
     logger = Logger.new(io)
